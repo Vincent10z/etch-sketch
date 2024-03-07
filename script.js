@@ -1,37 +1,50 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Your DOM manipulation code goes here...
     const container = document.getElementById('container');
     const button = document.getElementById('button');
-  })
 
+    let isDrawing = false;
 
+    // Function to create the grid
+    function createGrid(rows, cols) {
+        container.innerHTML = ''; // Clear existing grid
+        for (let i = 0; i < rows * cols; i++) {
+            const square = document.createElement('div');
+            square.classList.add('square'); // Add the class 'square' to each div
+            container.appendChild(square); // Append each div to the container
 
-function getGridChoice(){
-    let rows = 16;
-    let col = 16;
+            // Add event listeners for mouseover, mousedown, and mouseup
+            square.addEventListener('mouseover', (event) => {
+                if (isDrawing) {
+                    event.target.style.backgroundColor = 'black'; // Change background color when drawing
+                }
+            });
 
-}
+            square.addEventListener('mousedown', () => {
+                isDrawing = true; // Set drawing flag to true when mouse button is pressed down
+            });
 
-function createGrid(rows, cols) {
-
-    for (let i = 0; i < rows * cols; i++) {
-      const square = document.createElement('div');
-      square.classList.add('square'); // Add the class 'box' to each div
-      container.appendChild(square); // Append each div to the container
+            square.addEventListener('mouseup', () => {
+                isDrawing = false; // Set drawing flag to false when mouse button is released
+            });
+        }
     }
 
-    square.addEventListener('mouseenter', () => {
-        square.classList.add('hovered');
-    });
+    // Function to prompt user for number of squares
+    function promptNumberOfSquares() {
+        const squaresPerSide = prompt('Enter the number of squares per side for the new grid:');
+        if (squaresPerSide) {
+            const numSquares = parseInt(squaresPerSide);
+            if (!isNaN(numSquares)) {
+                createGrid(numSquares, numSquares);
+            } else {
+                alert('Please enter a valid number.');
+            }
+        }
+    }
 
-    square.addEventListener('mouseleave', () => {
-        square.classList.add('hovered');
-    });
+    // Add event listener to the popup button
+    button.addEventListener('click', promptNumberOfSquares);
 
-
-
-  }
-
-  createGrid(16, 16);
-
-
+    // Initial grid creation
+    createGrid(16, 16);
+});
